@@ -74,5 +74,10 @@ compile : CompileInput -> Result Error CompileOutput
 compile input =
     input.inputContents
         |> Parser.parse
-        |> Debug.log "parsed"
-        |> Result.map (Emit.emit input >> Debug.log "emitted")
+        |> Result.map
+            (List.reverse
+                >> List.map (Debug.log "parsed")
+                >> List.reverse
+                >> Emit.emit input
+                >> Debug.log "emitted"
+            )

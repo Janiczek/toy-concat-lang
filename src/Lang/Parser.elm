@@ -47,8 +47,6 @@ stringParser : Parser Token.Type
 stringParser =
     Parser.succeed identity
         |. Parser.symbol "\""
-        |= (Parser.chompUntil "\""
-                |> Parser.getChompedString
-           )
+        |= (Parser.chompWhile ((/=) '"') |> Parser.getChompedString)
         |. Parser.symbol "\""
         |> Parser.map Token.String

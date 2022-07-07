@@ -2,11 +2,17 @@
 
 COLOR_OFF="\e[0m";
 DIM="\e[2m";
+OUTFILE="compiler.js"
 
 function compile {
-  find src -type f -name '*.elm' | xargs npx elm-esm make --output=elm.js \
-    && echo "Starting the compiler" \
-    && node index.js
+  rm elm.js >& /dev/null
+  find src -type f -name '*.elm' | xargs elm make --output=/dev/null
+  npx elm-esm make src/Main.elm --output="${OUTFILE}"
+  if [ -f "${OUTFILE}" ]; then
+    echo "Starting the compiler"
+    node index.js
+  fi
+
 }
 
 function run {
