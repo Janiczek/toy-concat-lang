@@ -1,4 +1,4 @@
-import {Elm} from './elm.js';
+import {Elm} from './compiler.js';
 import * as fs from 'fs';
 const inputPath = 'example.prg';
 const flags = {

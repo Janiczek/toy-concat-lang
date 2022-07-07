@@ -1,5 +1,9 @@
 port module Main exposing (main)
 
+import Lang.Common exposing (CompileInput, CompileOutput)
+import Lang.Emit as Emit
+import Lang.Error exposing (Error(..))
+import Lang.Parser as Parser
 import Platform
 
 
@@ -30,27 +34,10 @@ type alias Msg =
     Never
 
 
-type alias CompileInput =
-    { inputPath : String
-    , inputContents : String
-    , outputJsPath : String
-    }
-
-
-type CompileError
-    = NotImplemented
-
-
-type alias CompileOutput =
-    { js : String
-    , sourceMap : String
-    }
-
-
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     let
-        result : Result CompileError CompileOutput
+        result : Result Error CompileOutput
         result =
             compile flags
     in
@@ -80,12 +67,12 @@ sourceMapPath outputJsPath =
 
 sourceMapComment : String -> String
 sourceMapComment outputJsPath =
-    "//# sourceMappingURL=localhost:8000/" ++ sourceMapPath outputJsPath
+    "//# sourceMappingURL=http://localhost:8000/" ++ sourceMapPath outputJsPath
 
 
-compile : CompileInput -> Result CompileError CompileOutput
+compile : CompileInput -> Result Error CompileOutput
 compile input =
-    Ok
-        { js = "js"
-        , sourceMap = "sourceMap"
-        }
+    input.inputContents
+        |> Parser.parse
+        |> Debug.log "parsed"
+        |> Result.map (Emit.emit input >> Debug.log "emitted")
