@@ -125,8 +125,5 @@ emit input tokens =
 finalize : CompileInput -> State -> CompileOutput
 finalize input state =
     { js = state.js
-    , sourceMap =
-        state.sourceMap
-            |> SourceMap.encode
-            |> Json.Encode.encode 2
+    , sourceMap = SourceMap.toString state.sourceMap
     }
