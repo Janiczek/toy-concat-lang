@@ -18,7 +18,7 @@ type alias State =
 initState : CompileInput -> State
 initState input =
     { js = jsPreamble
-    , currentLine = List.length (String.lines jsPreamble)
+    , currentLine = List.length (String.lines jsPreamble) + 1
     , sourceMap =
         SourceMap.empty
             |> SourceMap.withFile input.outputJsPath
